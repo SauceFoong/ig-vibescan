@@ -15,6 +15,7 @@ export interface InstagramPost {
   commentsDisabled: boolean;
   pinned: boolean;
   locationName?: string;
+  profilePicUrl?: string;
 }
 
 export interface TaggedUser {
@@ -34,6 +35,7 @@ export interface ScrapeResponse {
   username: string;
   totalScraped: number;
   filteredCount: number;
+  profilePicUrl?: string;
 }
 
 export interface AnalysisRequest {

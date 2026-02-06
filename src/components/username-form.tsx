@@ -6,13 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -35,14 +28,12 @@ export function UsernameForm() {
     e.preventDefault();
     setError("");
 
-    // Validate username
     const cleanUsername = username.replace(/^@/, "").trim();
     if (!cleanUsername) {
       setError("Please enter an Instagram username");
       return;
     }
 
-    // Validate year range
     if (parseInt(startYear) > parseInt(endYear)) {
       setError("Start year cannot be after end year");
       return;
@@ -51,7 +42,6 @@ export function UsernameForm() {
     setIsLoading(true);
 
     try {
-      // Navigate to results page with query params
       const params = new URLSearchParams({
         username: cleanUsername,
         startYear,
@@ -65,83 +55,102 @@ export function UsernameForm() {
   };
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">VibeScan</CardTitle>
-        <CardDescription>
-          Analyze any public Instagram profile to discover personality traits,
-          interests, and MBTI type
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-2">
-            <Label htmlFor="username">Instagram Username</Label>
+    <div className="glass rounded-2xl p-8 shadow-xl shadow-purple-500/5 w-full">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Username input */}
+        <div className="space-y-2">
+          <Label htmlFor="username" className="text-sm font-medium">
+            Instagram Username
+          </Label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
+              @
+            </span>
             <Input
               id="username"
               type="text"
-              placeholder="@username or username"
+              placeholder="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               disabled={isLoading}
+              className="pl-8 h-11 bg-white/60 dark:bg-white/5 border-white/40 dark:border-white/10 focus:border-purple-400 transition-colors"
             />
           </div>
+        </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="startYear">From Year</Label>
-              <Select
-                value={startYear}
-                onValueChange={setStartYear}
-                disabled={isLoading}
-              >
-                <SelectTrigger id="startYear">
-                  <SelectValue placeholder="Start Year" />
-                </SelectTrigger>
-                <SelectContent>
-                  {years.map((year) => (
-                    <SelectItem key={year} value={String(year)}>
-                      {year}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+        {/* Year range */}
+        <div className="space-y-2">
+          <Label className="text-sm font-medium">Date Range</Label>
+          <div className="grid grid-cols-2 gap-3">
+            <Select
+              value={startYear}
+              onValueChange={setStartYear}
+              disabled={isLoading}
+            >
+              <SelectTrigger className="h-11 bg-white/60 dark:bg-white/5 border-white/40 dark:border-white/10">
+                <SelectValue placeholder="From" />
+              </SelectTrigger>
+              <SelectContent>
+                {years.map((year) => (
+                  <SelectItem key={year} value={String(year)}>
+                    {year}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-            <div className="space-y-2">
-              <Label htmlFor="endYear">To Year</Label>
-              <Select
-                value={endYear}
-                onValueChange={setEndYear}
-                disabled={isLoading}
-              >
-                <SelectTrigger id="endYear">
-                  <SelectValue placeholder="End Year" />
-                </SelectTrigger>
-                <SelectContent>
-                  {years.map((year) => (
-                    <SelectItem key={year} value={String(year)}>
-                      {year}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            <Select
+              value={endYear}
+              onValueChange={setEndYear}
+              disabled={isLoading}
+            >
+              <SelectTrigger className="h-11 bg-white/60 dark:bg-white/5 border-white/40 dark:border-white/10">
+                <SelectValue placeholder="To" />
+              </SelectTrigger>
+              <SelectContent>
+                {years.map((year) => (
+                  <SelectItem key={year} value={String(year)}>
+                    {year}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
+        </div>
 
-          {error && (
-            <p className="text-sm text-red-500 text-center">{error}</p>
+        {/* Error message */}
+        {error && (
+          <div className="flex items-center gap-2 p-3 rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800/40">
+            <svg className="w-4 h-4 text-red-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01" />
+            </svg>
+            <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+          </div>
+        )}
+
+        {/* Submit button */}
+        <Button
+          type="submit"
+          disabled={isLoading}
+          className="w-full h-11 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 hover:from-purple-700 hover:via-pink-600 hover:to-orange-600 text-white font-semibold shadow-lg shadow-purple-500/20 transition-all hover:shadow-purple-500/30 hover:scale-[1.01] active:scale-[0.99]"
+        >
+          {isLoading ? (
+            <span className="flex items-center gap-2">
+              <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              </svg>
+              Scanning...
+            </span>
+          ) : (
+            "Scan Vibes"
           )}
+        </Button>
 
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Analyzing..." : "Analyze Profile"}
-          </Button>
-
-          <p className="text-xs text-muted-foreground text-center">
-            Maximum 20 posts will be analyzed from the selected date range
-          </p>
-        </form>
-      </CardContent>
-    </Card>
+        <p className="text-xs text-muted-foreground/70 text-center">
+          Up to 10 photos analyzed from the selected date range
+        </p>
+      </form>
+    </div>
   );
 }

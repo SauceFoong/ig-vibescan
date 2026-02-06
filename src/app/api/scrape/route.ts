@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Scrape Instagram profile
-    const { posts, totalScraped } = await scrapeInstagramProfile(
+    const { posts, totalScraped, profilePicUrl } = await scrapeInstagramProfile(
       username,
       start,
       end
@@ -51,6 +51,7 @@ export async function POST(request: NextRequest) {
       username: username.replace(/^@/, "").trim(),
       totalScraped,
       filteredCount: posts.length,
+      profilePicUrl,
     };
 
     return NextResponse.json(response);

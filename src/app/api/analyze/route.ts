@@ -22,8 +22,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Limit to 20 photos max
-    const limitedUrls = photoUrls.slice(0, 20);
+    // Limit to 10 photos max
+    const limitedUrls = photoUrls.slice(0, 10);
 
     // Analyze photos with OpenAI
     const analysis = await analyzePhotos(limitedUrls, username);
